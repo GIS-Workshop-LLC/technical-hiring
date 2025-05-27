@@ -1,0 +1,13 @@
+name: SonarCloud Static Analysis
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  sonarcloud-static-analysis:
+    name: SonarCloud Static Analysis
+    uses: GIS-Workshop-LLC/reusable-workflows/.github/workflows/sonarcloud-analysis.yaml@main
+    secrets:
+      GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
