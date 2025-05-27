@@ -156,3 +156,11 @@ dist
 
 #macOS
 .DS_Store
+
+#VS Csharp Solution
+**/obj/Debug/**
+**/bin/Debug/**
+**/obj/Release/**
+**/bin/Release/**
+*.nuget.*
+project.assets.json
