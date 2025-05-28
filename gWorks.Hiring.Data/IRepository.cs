@@ -18,4 +18,8 @@ public interface IRepository<TEntity>
     Task AddAsync(params TEntity[] entities);
 
     void RemoveRange(IEnumerable<TEntity> entities);
+
+    int SaveChanges();
+
+    Task<int> SaveChangesAsync();
 }

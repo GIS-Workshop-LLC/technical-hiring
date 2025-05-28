@@ -164,3 +164,4 @@ dist
 **/bin/Release/**
 *.nuget.*
 project.assets.json
+.vs/

@@ -11,6 +11,5 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddSchoolDbContext();
 builder.Services.AddSingleton<Application>();
 builder.Services.AddScoped<ISchoolDataSeedService, SchoolDataSeedService>();
-builder.Services.AddScoped<IStudentService, StudentService>();
 
 await builder.RunApplicationWithEntryPoint<Application>(async a => await a.Run());

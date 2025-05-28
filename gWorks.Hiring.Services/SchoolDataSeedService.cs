@@ -11,11 +11,19 @@ public class SchoolDataSeedService : ISchoolDataSeedService
     private const string SchoolDomain = "gworks.edu";
     private static Random Random = new Random();
 
-    private readonly IDbContext _dbContext;
+    private readonly IRepository<Student> _studentRepo;
+    private readonly IRepository<Teacher> _teacherRepo;
+    private readonly IRepository<Classroom> _classroomRepo;
+    private readonly IRepository<ClassPeriod> _classPeriodRepo;
+    private readonly IRepository<InstructedClass> _classRepo;
 
-    public SchoolDataSeedService(IDbContext dbContext)
+    public SchoolDataSeedService(IRepository<Student> studentRepo, IRepository<Teacher> teacherRepo, IRepository<Classroom> classroomRepo, IRepository<ClassPeriod> classPeriodRepo, IRepository<InstructedClass> classRepo)
     {
-        _dbContext = dbContext;
+        _studentRepo = studentRepo;
+        _teacherRepo = teacherRepo;
+        _classroomRepo = classroomRepo;
+        _classPeriodRepo = classPeriodRepo;
+        _classRepo = classRepo;
     }
 
     public async Task SeedData()
@@ -25,14 +33,14 @@ public class SchoolDataSeedService : ISchoolDataSeedService
         var classrooms = GetClassrooms().ToList();
         var classPeriods = GetClassPeriods().ToList();
 
-        await _dbContext.GetDbSet<Student>().AddRangeAsync(students);
-        await _dbContext.GetDbSet<Teacher>().AddRangeAsync(teachers);
-        await _dbContext.GetDbSet<Classroom>().AddRangeAsync(classrooms);
-        await _dbContext.GetDbSet<ClassPeriod>().AddRangeAsync(classPeriods);
+        await _studentRepo.AddRangeAsync(students);
+        await _teacherRepo.AddRangeAsync(teachers);
+        await _classroomRepo.AddRangeAsync(classrooms);
+        await _classPeriodRepo.AddRangeAsync(classPeriods);
 
         var instructedClasses = GetClasses(students, teachers, classrooms, classPeriods).ToList();
-        await _dbContext.GetDbSet<InstructedClass>().AddRangeAsync(instructedClasses);
-        await _dbContext.SaveChangesAsync();
+        await _classRepo.AddRangeAsync(instructedClasses);
+        await _classRepo.SaveChangesAsync();
     }
 
     private static IEnumerable<InstructedClass> GetClasses(ICollection<Student> students, ICollection<Teacher> teachers, ICollection<Classroom> classrooms, ICollection<ClassPeriod> classPeriods)
