@@ -27,6 +27,8 @@ internal class Repository<TEntity> : IRepository<TEntity>
 
     public void RemoveRange(IEnumerable<TEntity> entities) => DbSet.RemoveRange(entities);
 
+    public void Remove(params TEntity[] entities) => RemoveRange(entities);
+
     public int SaveChanges() => _dbContext.SaveChanges();
 
     public Task<int> SaveChangesAsync() => _dbContext.SaveChangesAsync();

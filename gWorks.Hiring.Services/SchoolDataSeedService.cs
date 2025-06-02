@@ -5,11 +5,14 @@ using System.Linq;
 
 namespace gWorks.Hiring.Services;
 
+// NOTE: DO NOT MODIFY
 public class SchoolDataSeedService : ISchoolDataSeedService
 {
     private const int StudentCount = 500, TeacherCount = 40, ClassroomCount = 35;
     private const string SchoolDomain = "gworks.edu";
     private static Random Random = new Random();
+    private static readonly string[] ClassSubjects = ["Math", "Science", "English", "Physics", "Geography", "History", "Chemistry"];
+    private static readonly Func<string, string>[] SubjectModifiers = [s => $"AP {s}", s => s + "I", s => s + "II", s => s + "III"];
 
     private readonly IRepository<Student> _studentRepo;
     private readonly IRepository<Teacher> _teacherRepo;
@@ -68,6 +71,7 @@ public class SchoolDataSeedService : ISchoolDataSeedService
                         .ToList(),
                     ClassPeriod = classPeriod,
                     Classroom = lunchClassroom,
+                    ClassName = "Lunch"
                 };
 
                 continue;
@@ -77,21 +81,26 @@ public class SchoolDataSeedService : ISchoolDataSeedService
             var teachersToUse = Shuffle(teachers.ToList()).Take(classroomsUsedPerPeriod).ToList();
             var studentsInClasses = Shuffle(students.ToList()).Chunk(studentsPerClassroom).Select((s, i) => new { Students = s, Classroom = classroomsToUse[i], Teacher = teachersToUse[i] }).ToList();
 
-            foreach (var grp in studentsInClasses)
-            {
-                yield return new InstructedClass
+            var faker = new Faker<InstructedClass>()
+                .RuleFor(x => x.Students, f => studentsInClasses[f.IndexFaker].Students
+                    .Select(s => new InstructedClassStudent
+                    {
+                        StudentId = s.Id,
+                        Student = s,
+                    })
+                    .ToList())
+                .RuleFor(x => x.ClassPeriod, classPeriod)
+                .RuleFor(x => x.Classroom, f => studentsInClasses[f.IndexFaker].Classroom)
+                .RuleFor(x => x.Teacher, f => studentsInClasses[f.IndexFaker].Teacher)
+                .RuleFor(x => x.ClassName, f =>
                 {
-                    Students = grp.Students
-                        .Select(s => new InstructedClassStudent
-                        {
-                            StudentId = s.Id,
-                            Student = s,
-                        })
-                        .ToList(),
-                    ClassPeriod = classPeriod,
-                    Classroom = grp.Classroom,
-                    Teacher = grp.Teacher,
-                };
+                    var c = f.PickRandom(ClassSubjects);
+                    return f.PickRandom(SubjectModifiers)(c);
+                });
+
+            foreach (var ic in faker.Generate(studentsInClasses.Count))
+            {
+                yield return ic;
             }
         }
     }

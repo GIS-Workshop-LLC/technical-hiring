@@ -14,5 +14,7 @@ public class InstructedClass : BaseEntity
 
     public required ClassPeriod ClassPeriod { get; set; }
 
+    public required string ClassName { get; set; }
+
     public ICollection<InstructedClassStudent> Students { get; set; } = [];
 }
