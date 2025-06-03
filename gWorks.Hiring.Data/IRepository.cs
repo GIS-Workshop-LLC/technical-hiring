@@ -9,14 +9,14 @@ public interface IRepository<TEntity>
     IQueryable<TEntity> Query { get; }
 
     /// <summary>
-    /// Gets an entity referenced by the primary key(s)
+    /// Gets an entity referenced by the primary key(s). This uses the repository's "Find" method and associated caching
     /// </summary>
     /// <param name="ids">primary  key(s)</param>
     /// <returns>The record if it exists, otherwise null</returns>
     TEntity? GetById(params object?[] ids);
 
     /// <summary>
-    /// Gets an entity referenced by the primary key(s)
+    /// Gets an entity referenced by the primary key(s). This uses the repository's "Find" method and associated caching
     /// </summary>
     /// <param name="ids">primary  key(s)</param>
     /// <returns>The record if it exists, otherwise null</returns>
