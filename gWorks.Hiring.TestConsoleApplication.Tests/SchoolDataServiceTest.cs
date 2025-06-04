@@ -44,8 +44,8 @@ namespace gWorks.Hiring.TestConsoleApplication.Tests
                 var student = new Student
                 {
                     Id = 1,
-                    FirstName = "Alice",
-                    LastName = "Smith",
+                    FirstName = "Nisar",
+                    LastName = "Ahmed",
                     InstructedClasses = new List<InstructedClassStudent>
                  {
                      new InstructedClassStudent
@@ -95,7 +95,7 @@ namespace gWorks.Hiring.TestConsoleApplication.Tests
             var result = service.GetStudentSchedule(1);
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.StudentName, Is.EqualTo("Alice Smith"));
+            Assert.That(result.StudentName, Is.EqualTo("Nisar Ahmed"));
             Assert.That(result.Courses.Count, Is.EqualTo(1));
             Assert.That(result.Courses[0].TeacherName, Does.Contain("John"));
         }

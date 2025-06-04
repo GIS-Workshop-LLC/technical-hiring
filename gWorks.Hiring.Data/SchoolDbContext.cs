@@ -22,11 +22,11 @@ public class SchoolDbContext : DbContext, IDbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Composite key for join entity
+
         modelBuilder.Entity<InstructedClassStudent>()
             .HasKey(ics => new { ics.StudentId, ics.InstructedClassId });
 
-        // Relationships
+        
         modelBuilder.Entity<InstructedClassStudent>()
             .HasOne(ics => ics.Student)
             .WithMany(s => s.InstructedClasses)

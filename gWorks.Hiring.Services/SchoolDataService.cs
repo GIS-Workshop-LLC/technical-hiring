@@ -7,50 +7,6 @@ namespace gWorks.Hiring.Services
 {
     public class SchoolDataService : ISchoolDataService
     {
-        //    private readonly SchoolDbContext _context;
-
-        //    public SchoolDataService(SchoolDbContext context)
-        //    {
-        //        _context = context;
-        //    }
-
-
-        //    public int GetAverageClassSize()
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-
-        //    public int GetStudentCount()
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-
-        //    public StudentScheduleDto GetStudentSchedule(int studentId)
-        //    {
-        //        var student = _context.Students
-        //            .Include(s => s.Enrollments).
-        //            ThenInclude(e => e.Course).
-        //            ThenInclude(c => c.Teacher).
-        //            FirstOrDefault(s => s.Id ==studentId);
-        //        if (student== null)
-        //        {
-        //            return null;
-        //        }
-
-        //        var courses=student.Enrollments.Select( e=>new CourseSheduleDto
-        //        {
-        //            CourseName=e.Course.Name,
-        //            TeacherName=e.Course.Teacher?.Name??"TBD",
-        //            Time="9 AM -10 AM"
-        //        }).ToList();
-        //        return new StudentScheduleDto
-        //        {
-        //            StudentName = student.Name,
-        //            Courses = courses
-        //        };
-
-
-        //++++++++++++++New code+++++++++
 
         private readonly SchoolDbContext _context;
 
@@ -76,7 +32,10 @@ namespace gWorks.Hiring.Services
             var courses = student.InstructedClasses.Select(ic => new CourseScheduleDto
             {
                 CourseName = $"Classroom {ic.InstructedClass.ClassroomId}", // Customize if needed
-                TeacherName = $"{ic.InstructedClass.Teacher?.FirstName} {ic.InstructedClass.Teacher?.LastName}",
+                TeacherName = (string.IsNullOrWhiteSpace(ic.InstructedClass.Teacher?.FirstName) &&
+               string.IsNullOrWhiteSpace(ic.InstructedClass.Teacher?.LastName))
+               ? "TBD"
+               : $"{ic.InstructedClass.Teacher?.FirstName} {ic.InstructedClass.Teacher?.LastName}".Trim(),
                 Time = ic.InstructedClass.ClassPeriod != null
             ? $"{ic.InstructedClass.ClassPeriod.DayOfWeek} {ic.InstructedClass.ClassPeriod.StartTime} - {ic.InstructedClass.ClassPeriod.EndTime}"
             : "N/A"
@@ -85,6 +44,7 @@ namespace gWorks.Hiring.Services
 
             return new StudentScheduleDto
             {
+                StudentId=student.Id,
                 StudentName = $"{student.FirstName} {student.LastName}",
                 Courses = courses
             };
