@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using gWorks.Hiring.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace gWorks.Hiring.Data;
@@ -13,6 +14,8 @@ internal class SchoolDbContext : DbContext, IDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.RegisterBaseEntities();
+        modelBuilder.RegisterEntity<InstructedClassStudent>();
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(modelBuilder);
     }
