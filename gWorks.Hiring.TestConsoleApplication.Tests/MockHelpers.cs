@@ -16,8 +16,20 @@ internal static class MockHelpers
         mock.Setup(x => x.AddRangeAsync(It.IsAny<IEnumerable<T>>())).Returns<IEnumerable<T>>(items => { dataSet.AddRange(items); return Task.CompletedTask; }).Verifiable();
         mock.Setup(x => x.AddAsync(It.IsAny<T[]>())).Returns<T[]>(items => { dataSet.AddRange(items); return Task.CompletedTask; }).Verifiable();
 
-        mock.Setup(x => x.RemoveRange(It.IsAny<IEnumerable<T>>())).Callback(dataSet.RemoveRange).Verifiable();
-        mock.Setup(x => x.Remove(It.IsAny<T[]>())).Callback(dataSet.RemoveRange).Verifiable();
+        mock.Setup(x => x.RemoveRange(It.IsAny<IEnumerable<T>>())).Callback<IEnumerable<T>>(x =>
+        {
+            foreach (var r in x)
+            {
+                dataSet.Remove(r);
+            }
+        }).Verifiable();
+        mock.Setup(x => x.Remove(It.IsAny<T[]>())).Callback<T[]>(x =>
+        {
+            foreach (var r in x)
+            {
+                dataSet.Remove(r);
+            }
+        }).Verifiable();
 
         mock.SetupGet(x => x.Query).Returns(() => dataSet.AsQueryable()).Verifiable();
         return (mock, dataSet);
