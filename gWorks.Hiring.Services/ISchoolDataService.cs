@@ -1,4 +1,6 @@
-﻿namespace gWorks.Hiring.Services;
+﻿using gWorks.Hiring.Services.Models;
+
+namespace gWorks.Hiring.Services;
 
 public interface ISchoolDataService
 {
@@ -10,7 +12,7 @@ public interface ISchoolDataService
     /// <summary>
     /// Get the average number of students in each class
     /// </summary>
-    int GetAverageClassSize();
+    double GetAverageClassSize();
 
     /// <summary>
     /// Gets a student's weekly schedule (sorted by day-of-week, then by start time).
@@ -19,5 +21,5 @@ public interface ISchoolDataService
     /// </summary>
     /// <param name="studentId">Student.Id (primary key)</param>
     /// <returns>A DTO (model) of the student's schedule</returns>
-    object GetStudentSchedule(int studentId);
+    StudentScheduleDto GetStudentSchedule(int studentId);
 }
