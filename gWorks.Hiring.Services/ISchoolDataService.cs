@@ -1,4 +1,6 @@
-﻿namespace gWorks.Hiring.Services;
+﻿using gWorks.Hiring.Services.Models;
+
+namespace gWorks.Hiring.Services;
 
 public interface ISchoolDataService
 {
@@ -19,5 +21,5 @@ public interface ISchoolDataService
     /// </summary>
     /// <param name="studentId">Student.Id (primary key)</param>
     /// <returns>A DTO (model) of the student's schedule</returns>
-    object GetStudentSchedule(int studentId);
+    StudentScheduleDto GetStudentSchedule(int studentId);
 }

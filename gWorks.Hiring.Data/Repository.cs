@@ -2,7 +2,7 @@
 
 namespace gWorks.Hiring.Data;
 
-internal class Repository<TEntity> : IRepository<TEntity>
+public class Repository<TEntity> : IRepository<TEntity>
     where TEntity : class
 {
     private readonly IDbContext _dbContext;
